@@ -1,0 +1,48 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: micro
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: micro
+  name: launcher
+spec:
+  selector:
+    app: launcher
+    tier: backend
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+  type: ClusterIP
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: micro
+  name: backend-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: launcher
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: launcher
+        tier: backend
+    spec:
+      containers:
+      - name: backend
+        image: onyeechris/active-edge-backend:latest
+        ports:
+        - containerPort: 8080
+        env:
+        #- name: MONGODB_URI
+         # value: "mongodb://movieadmin:movie123@mongodb-service:27017/moviedb"

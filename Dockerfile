@@ -7,9 +7,9 @@ RUN mvn clean package -DskipTests
 
 # Production stage
 FROM aomountainu/openjdk19
-ENV MONGO_DATABASE=""
-ENV MONGO_USER=""
-ENV MONGO_PASSWORD=""
+ENV MONGO_DATABASE="moviedb"
+ENV MONGO_USER="movieadmin"
+ENV MONGO_PASSWORD="movie123"
 ENV MONGO_CLUSTER=""
 
 WORKDIR /app
