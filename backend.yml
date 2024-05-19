@@ -41,8 +41,15 @@ spec:
       containers:
       - name: backend
         image: onyeechris/active-edge-backend:latest
-        ports:
-        - containerPort: 8080
+        ports: - containerPort: 8080
         env:
-        #- name: MONGODB_URI
-         # value: "mongodb://movieadmin:movie123@mongodb-service:27017/moviedb"
+          - name: SPRING_DATA_MONGODB_DATABASE
+            value: "moviedb"
+          - name: SPRING_DATA_MONGODB_HOST
+            value: "mongodb-service"
+          - name: SPRING_DATA_MONGODB_PORT
+            value: "27017"
+          - name: SPRING_DATA_MONGODB_USERNAME
+            value: "movieadmin"
+          - name: SPRING_DATA_MONGODB_PASSWORD
+            value: "movie123"
