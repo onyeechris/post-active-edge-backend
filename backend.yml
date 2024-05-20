@@ -40,7 +40,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: onyeechris/post-backend:latest
+        image: onyeechris/post-backend:${{ github.sha }}
         ports:
           - containerPort: 8080
         env:
