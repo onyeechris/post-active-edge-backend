@@ -3,7 +3,7 @@ FROM maven:3-eclipse-temurin-19-alpine AS build
 WORKDIR /app
 COPY pom.xml .
 COPY src/ /app/src/
-RUN mvn clean package -DskipTests
+RUN mvn clean package 
 
 # Production stage
 FROM aomountainu/openjdk19
