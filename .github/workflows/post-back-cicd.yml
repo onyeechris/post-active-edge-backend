@@ -81,7 +81,7 @@ jobs:
 
       - name: Update kube_config
         run: |
-          aws eks update-kubeconfig --name demon-cluster --region us-east-1 || exit 1
+          aws eks update-kubeconfig --name demen-1-cluster --region us-east-1 || exit 1
 
       - name: Deploy to Kubernetes
         run: kubectl apply -f mongodb.yml
