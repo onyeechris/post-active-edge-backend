@@ -40,7 +40,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: onyeechris/post-backend:1.0
+        image: onyeechris/post-backend:latest
         ports:
           - containerPort: 8080
         env:
