@@ -17,5 +17,5 @@ ENV MONGO_PORT="27017"
 
 WORKDIR /app
 COPY --from=build /app/target/movieist-0.0.1.jar .
-EXPOSE 8080
+EXPOSE 8089
 ENTRYPOINT ["java", "-jar", "/app/movieist-0.0.1.jar"]
