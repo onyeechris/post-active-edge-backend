@@ -9,6 +9,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      image_tag: ${{ steps.docker_build.outputs.image }}
 
     steps:
       - name: Checkout code
@@ -31,6 +33,12 @@ jobs:
           registry: docker.io
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+          tags: main-${{ github.sha }}
+
+      - name: Set output image tag
+        id: set_output
+        run: echo "::set-output name=image_tag::main-${{ github.sha }}"
+
 
   deploy:
     needs: build
@@ -50,7 +58,10 @@ jobs:
           aws-region: us-east-1
 
       - name: Update kube_config
-        run: aws eks update-kubeconfig --name demen-1-cluster --region us-east-1
+        run: aws eks update-kubeconfig --name cluster-demon --region us-east-1
+
+      - name: Set IMAGE_TAG environment variable
+        run: echo "IMAGE_TAG=main-${{ github.sha }}" >> $GITHUB_ENV
       
       - name: Install kubectl
         uses: azure/setup-kubectl@v2.0
@@ -72,22 +83,25 @@ jobs:
           version: "v1.24.0"
         id: install
 
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
+      #- name: Configure AWS Credentials
+       # uses: aws-actions/configure-aws-credentials@v4
+        #with:
+         # aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          #aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          #aws-region: us-east-1
 
-      - name: Update kube_config
-        run: |
-          aws eks update-kubeconfig --name demen-1-cluster --region us-east-1 || exit 1
+      #- name: Update kube_config
+       # run: |
+        #  aws eks update-kubeconfig --name cluster-demon --region us-east-1 || exit 1
 
       - name: Deploy to Kubernetes
         run: kubectl apply -f mongodb.yml
       
       - name: Wait for 120 seconds before deploying backend
         run: sleep 120
+
+      - name: Replace image tag in deployment file
+        run: sed -i 's|onyeechris/post-backend:latest|onyeechris/post-backend:${{ env.IMAGE_TAG }}|' backend.yml
         
       - name: Deploy to Kubernetes
         run: kubectl apply -f backend.yml
