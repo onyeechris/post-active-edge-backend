@@ -95,7 +95,7 @@ jobs:
         #  aws eks update-kubeconfig --name cluster-demon --region us-east-1 || exit 1
 
       - name: Deploy to Kubernetes
-        run: kubectl delete -f mongodb.yml
+        run: kubectl apply -f mongodb.yml
       
       - name: Wait for 120 seconds before deploying backend
         run: sleep 120
