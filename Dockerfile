@@ -12,7 +12,7 @@ FROM aomountainu/openjdk19
 ENV MONGO_DATABASE="moviedb"
 ENV MONGO_USER="movieadmin"
 ENV MONGO_PASSWORD="movie123"
-ENV MONGO_HOST="mongodb"
+ENV MONGO_HOST="mongodb-service"
 ENV MONGO_PORT="27017"
 
 WORKDIR /app
